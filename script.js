@@ -2,64 +2,64 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- Celebration Overlay & Balloons Logic ---
     const celebrationOverlay = document.getElementById('celebration-overlay');
+    const headerH1 = document.querySelector('header h1'); // Get the H1 element
+
     if (celebrationOverlay) {
-        // Function to create and animate a single balloon
         function createBalloon() {
             const balloon = document.createElement('div');
             balloon.classList.add('balloon');
 
-            // Randomize starting horizontal position
             balloon.style.left = `${Math.random() * 100}vw`;
-            // Balloons will start from bottom: 0% of the overlay, defined in CSS keyframe 'from'
-            // and their vertical movement and fade is controlled by 'balloon-rise' animation.
 
-            // Randomize animation duration and delay for variety
-            const duration = 10 + Math.random() * 10; // 10 to 20 seconds for the rise
-            const delay = Math.random() * 3; // 0 to 3 seconds delay for staggering appearance
+            const duration = 10 + Math.random() * 10;
+            const delay = Math.random() * 3;
 
-            // Apply both animations directly. The balloon-rise keyframe will handle its movement.
             balloon.style.animation = `
                 balloon-float 10s ease-in-out infinite alternate,
                 balloon-rise ${duration}s linear ${delay}s forwards
             `;
 
-            // Add a string for a more realistic look
             const string = document.createElement('div');
             string.classList.add('balloon-string');
             balloon.appendChild(string);
 
             celebrationOverlay.appendChild(balloon);
 
-            // Log for debugging: confirm balloon is created and appended
-            // console.log('Balloon created and appended:', balloon);
-
-            // Remove balloon after its animation is complete to clean up DOM
             setTimeout(() => {
                 balloon.remove();
-            }, (delay + duration) * 1000 + 500); // delay + duration + a small buffer
+            }, (delay + duration) * 1000 + 500);
         }
 
-        // Generate a number of balloons
-        const numberOfBalloons = 20; // You can adjust this number
+        const numberOfBalloons = 20;
         for (let i = 0; i < numberOfBalloons; i++) {
             createBalloon();
         }
 
-        // Fade out the overlay after a few seconds
+        // Start fading out the overlay after 4 seconds
         setTimeout(() => {
             celebrationOverlay.classList.add('fade-out');
-        }, 4000); // Start fading out after 4 seconds (adjust as needed)
+        }, 4000);
 
-        // Fully remove the overlay from DOM after it's faded out
+        // Fully remove the overlay AND THEN START THE H1 ANIMATION
         setTimeout(() => {
             celebrationOverlay.remove();
-        }, 6000); // Total time for fade out (4s delay + 1.5s transition + buffer)
+            // *** THIS IS THE KEY CHANGE ***
+            if (headerH1) {
+                headerH1.classList.add('reveal-text'); // Add the class to start typing animation
+            }
+        }, 6000); // Overlay takes 1.5s to fade out after 4s, so 5.5s total. Add a small buffer.
+    } else {
+        // Fallback: If for some reason overlay isn't there, just show the H1 anyway
+        if (headerH1) {
+            headerH1.classList.add('reveal-text');
+        }
     }
+
 
     // --- Reusable Carousel Function (only for Memories) ---
     function setupCarousel(carouselSelector) {
         const carousel = document.querySelector(carouselSelector);
-        if (!carousel) return; // Exit if carousel not found
+        if (!carousel) return;
 
         const items = carousel.querySelectorAll('img') || carousel.querySelectorAll('.carousel-item');
         if (items.length === 0) return;
@@ -77,10 +77,8 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         }
 
-        // Initial display
         showItem(currentItemIndex);
 
-        // Navigation buttons
         if (prevBtn) {
             prevBtn.addEventListener('click', () => {
                 currentItemIndex = (currentItemIndex - 1 + items.length) % items.length;
@@ -88,19 +86,16 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         }
         if (nextBtn) {
-            nextItemIndex = (currentItemIndex + 1) % items.length;
-            showItem(currentItemIndex); // Fixed typo from 'nextItemIndex' to 'currentItemIndex'
+            currentItemIndex = (currentItemIndex + 1) % items.length; // Fixed typo
+            showItem(currentItemIndex);
         }
 
-
-        // Auto-slide
         setInterval(() => {
             currentItemIndex = (currentItemIndex + 1) % items.length;
             showItem(currentItemIndex);
-        }, 5000); // Change item every 5 seconds
+        }, 5000);
     }
 
-    // Initialize carousel for Memories section only
     setupCarousel('.memories-carousel');
 
     // --- Scroll Reveal Animation for Sections ---
@@ -124,12 +119,6 @@ document.addEventListener('DOMContentLoaded', () => {
     scrollRevealSections.forEach(section => {
         sectionObserver.observe(section);
     });
-
-    // --- Header H1 Text Reveal Animation ---
-    const headerH1 = document.querySelector('header h1');
-    if (headerH1) {
-        headerH1.classList.add('reveal-text');
-    }
 
     // --- Audio Handling Note ---
     // Browsers heavily restrict autoplay. Users may need to click play.
