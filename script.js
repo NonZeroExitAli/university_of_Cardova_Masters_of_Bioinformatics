@@ -8,27 +8,35 @@ document.addEventListener('DOMContentLoaded', () => {
             const balloon = document.createElement('div');
             balloon.classList.add('balloon');
 
-            // Randomize starting position and size slightly
-            balloon.style.left = `${Math.random() * 100}vw`; // Anywhere across the width
-            balloon.style.bottom = `${-100 - (Math.random() * 200)}px`; // Start off-screen below
+            // Randomize starting horizontal position
+            balloon.style.left = `${Math.random() * 100}vw`;
+            // Balloons will start from bottom: 0% of the overlay, defined in CSS keyframe 'from'
+            // and their vertical movement and fade is controlled by 'balloon-rise' animation.
 
-            // Randomize animation duration for variety
-            const duration = 10 + Math.random() * 10; // 10 to 20 seconds
-            balloon.style.animationDuration = `${duration}s`;
-            balloon.style.animationDelay = `${Math.random() * 5}s`; // Stagger appearance
+            // Randomize animation duration and delay for variety
+            const duration = 10 + Math.random() * 10; // 10 to 20 seconds for the rise
+            const delay = Math.random() * 3; // 0 to 3 seconds delay for staggering appearance
+
+            // Apply both animations directly. The balloon-rise keyframe will handle its movement.
+            balloon.style.animation = `
+                balloon-float 10s ease-in-out infinite alternate,
+                balloon-rise ${duration}s linear ${delay}s forwards
+            `;
 
             // Add a string for a more realistic look
             const string = document.createElement('div');
             string.classList.add('balloon-string');
             balloon.appendChild(string);
 
-            // Append to overlay
             celebrationOverlay.appendChild(balloon);
 
-            // Remove balloon after its animation is likely complete to clean up DOM
+            // Log for debugging: confirm balloon is created and appended
+            // console.log('Balloon created and appended:', balloon);
+
+            // Remove balloon after its animation is complete to clean up DOM
             setTimeout(() => {
                 balloon.remove();
-            }, (duration * 1000) + 5000); // Duration in ms + buffer
+            }, (delay + duration) * 1000 + 500); // delay + duration + a small buffer
         }
 
         // Generate a number of balloons
@@ -80,11 +88,10 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         }
         if (nextBtn) {
-            nextBtn.addEventListener('click', () => {
-                currentItemIndex = (currentItemIndex + 1) % items.length;
-                showItem(currentItemIndex);
-            });
+            nextItemIndex = (currentItemIndex + 1) % items.length;
+            showItem(currentItemIndex); // Fixed typo from 'nextItemIndex' to 'currentItemIndex'
         }
+
 
         // Auto-slide
         setInterval(() => {
