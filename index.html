@@ -9,13 +9,16 @@
     <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;700&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
 </head>
 <body>
-    <!-- GLOBAL BACKGROUND MUSIC - Autoplays muted, no controls -->
-    <audio id="global-bg-music" autoplay loop muted>
+    <!-- GLOBAL BACKGROUND MUSIC -->
+    <audio id="global-bg-music" loop muted>
         <source src="audio/global_background_music.mp3" type="audio/mpeg">
         Your browser does not support the audio element.
     </audio>
 
-    <!-- REMOVED: MUSIC TOGGLE BUTTON -->
+    <!-- MUSIC TOGGLE BUTTON -->
+    <button id="music-toggle" title="Toggle Background Music">
+        <span class="icon">🔇</span> Music Off
+    </button>
 
     <!-- CELEBRATION OVERLAY - Appears when website opens -->
     <div id="celebration-overlay">
@@ -41,6 +44,14 @@
                     <h3>Ali</h3>
                 </div>
             </div>
+            <!-- REMOVED: 
+            <p class="music-note">Enjoy our special song for this moment:</p>
+            <audio controls loop>
+                <source src="audio/intro_music.mp3" type="audio/mpeg">
+                Your browser does not support the audio element.
+            </audio>
+            <p class="small-text">(Please press play to listen!)</p>
+            -->
         </section>
 
         <!-- Video Section (Single Video) -->
