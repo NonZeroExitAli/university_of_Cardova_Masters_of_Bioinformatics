@@ -9,6 +9,17 @@
     <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;700&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
 </head>
 <body>
+    <!-- GLOBAL BACKGROUND MUSIC -->
+    <audio id="global-bg-music" loop muted>
+        <source src="audio/global_background_music.mp3" type="audio/mpeg">
+        Your browser does not support the audio element.
+    </audio>
+
+    <!-- MUSIC TOGGLE BUTTON -->
+    <button id="music-toggle" title="Toggle Background Music">
+        <span class="icon">🔇</span> Music Off
+    </button>
+
     <!-- CELEBRATION OVERLAY - Appears when website opens -->
     <div id="celebration-overlay">
         <h1 class="celebration-text">Happy Birthday, Toty!</h1>
@@ -22,7 +33,7 @@
     </header>
 
     <main>
-        <!-- Intro Section: With one pic and your message (and music) -->
+        <!-- Intro Section: With one pic and my message (music now manual play) -->
         <section id="intro" class="scroll-reveal">
             <h2>My Dearest Toty,</h2>
             <div class="intro-content">
@@ -34,11 +45,12 @@
                 </div>
             </div>
             <p class="music-note">Enjoy our special song for this moment:</p>
-            <audio controls loop autoplay>
+            <!-- REMOVED AUTOPLAY FROM HERE -->
+            <audio controls loop>
                 <source src="audio/intro_music.mp3" type="audio/mpeg">
                 Your browser does not support the audio element.
             </audio>
-            <p class="small-text">(Autoplay might be blocked by browsers, please press play!)</p>
+            <p class="small-text">(Please press play to listen!)</p>
         </section>
 
         <!-- Video Section (Single Video) -->
@@ -53,7 +65,7 @@
             </div>
         </section>
 
-        <!-- Memories Section: 10 pics with background music (Carousel) -->
+        <!-- Memories Section: 10 pics with background music (Carousel) - music now manual play -->
         <section id="memories" class="scroll-reveal">
             <h2>Our Cherished Memories</h2>
             <p>A collection of moments that light up my heart:</p>
@@ -72,24 +84,39 @@
                 <button class="next-btn">›</button>
             </div>
             <p class="music-note">Our "memory lane" soundtrack:</p>
-            <audio controls loop autoplay>
+            <!-- REMOVED AUTOPLAY FROM HERE -->
+            <audio controls loop>
                 <source src="audio/memories_music.mp3" type="audio/mpeg">
                 Your browser does not support the audio element.
             </audio>
-            <p class="small-text">(Autoplay might be blocked by browsers, please press play!)</p>
+            <p class="small-text">(Please press play to listen!)</p>
         </section>
 
-        <!-- Wishes Section: Single Pic with Quote -->
+        <!-- Wishes Section: Single Pic with Quote (Updated with academic wish) -->
         <section id="wishes" class="scroll-reveal">
             <h2>My Hopes and Wishes for You</h2>
             <p>A special wish from my heart:</p>
             <div class="single-wish">
                 <img src="images/wish_pic1.jpg" alt="A special wish for you">
                 <div class="quote-overlay">
-                    <blockquote>"Happy Birthday, my love! May all your dreams come true and our journey together be filled with endless happiness."</blockquote>
+                    <blockquote>"Happy Birthday, my brilliant Toty! As you embark on your Master's/PhD journey and build the amazing career you envision, may your path be paved with profound insights, endless success, and boundless fulfillment. I'll always be cheering you on, with all my love."</blockquote>
                 </div>
             </div>
         </section>
+
+        <!-- NEW: Recorded Message Section -->
+        <section id="recorded-message" class="scroll-reveal">
+            <h2>A Special Message Just For You</h2>
+            <p>I wanted to tell you something special directly from my heart. Press play!</p>
+            <div class="video-container">
+                <video controls> <!-- No loop or muted by default here, as it's a message -->
+                    <source src="videos/my_recorded_message.mp4" type="video/mp4">
+                    Your browser does not support the video tag.
+                </video>
+            </div>
+            <p>I hope you have the most wonderful birthday, my love. Happy Birthday, Toty!</p>
+        </section>
+
     </main>
 
     <footer>
