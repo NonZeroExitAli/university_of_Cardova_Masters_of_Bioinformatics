@@ -1,11 +1,58 @@
 document.addEventListener('DOMContentLoaded', () => {
 
-    // --- Reusable Carousel Function ---
+    // --- Celebration Overlay & Balloons Logic ---
+    const celebrationOverlay = document.getElementById('celebration-overlay');
+    if (celebrationOverlay) {
+        // Function to create and animate a single balloon
+        function createBalloon() {
+            const balloon = document.createElement('div');
+            balloon.classList.add('balloon');
+
+            // Randomize starting position and size slightly
+            balloon.style.left = `${Math.random() * 100}vw`; // Anywhere across the width
+            balloon.style.bottom = `${-100 - (Math.random() * 200)}px`; // Start off-screen below
+
+            // Randomize animation duration for variety
+            const duration = 10 + Math.random() * 10; // 10 to 20 seconds
+            balloon.style.animationDuration = `${duration}s`;
+            balloon.style.animationDelay = `${Math.random() * 5}s`; // Stagger appearance
+
+            // Add a string for a more realistic look
+            const string = document.createElement('div');
+            string.classList.add('balloon-string');
+            balloon.appendChild(string);
+
+            // Append to overlay
+            celebrationOverlay.appendChild(balloon);
+
+            // Remove balloon after its animation is likely complete to clean up DOM
+            setTimeout(() => {
+                balloon.remove();
+            }, (duration * 1000) + 5000); // Duration in ms + buffer
+        }
+
+        // Generate a number of balloons
+        const numberOfBalloons = 20; // You can adjust this number
+        for (let i = 0; i < numberOfBalloons; i++) {
+            createBalloon();
+        }
+
+        // Fade out the overlay after a few seconds
+        setTimeout(() => {
+            celebrationOverlay.classList.add('fade-out');
+        }, 4000); // Start fading out after 4 seconds (adjust as needed)
+
+        // Fully remove the overlay from DOM after it's faded out
+        setTimeout(() => {
+            celebrationOverlay.remove();
+        }, 6000); // Total time for fade out (4s delay + 1.5s transition + buffer)
+    }
+
+    // --- Reusable Carousel Function (only for Memories) ---
     function setupCarousel(carouselSelector) {
         const carousel = document.querySelector(carouselSelector);
         if (!carousel) return; // Exit if carousel not found
 
-        // Handle either direct img elements or carousel-item divs
         const items = carousel.querySelectorAll('img') || carousel.querySelectorAll('.carousel-item');
         if (items.length === 0) return;
 
@@ -39,31 +86,30 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         }
 
-        // Auto-slide (optional, but adds dynamism)
+        // Auto-slide
         setInterval(() => {
             currentItemIndex = (currentItemIndex + 1) % items.length;
             showItem(currentItemIndex);
         }, 5000); // Change item every 5 seconds
     }
 
-    // Initialize carousels for specific sections
-    setupCarousel('.memories-carousel'); // For the memories section
-    setupCarousel('.wishes-carousel');   // For the wishes section
+    // Initialize carousel for Memories section only
+    setupCarousel('.memories-carousel');
 
     // --- Scroll Reveal Animation for Sections ---
     const scrollRevealSections = document.querySelectorAll('.scroll-reveal');
 
     const observerOptions = {
-        root: null, // relative to the viewport
+        root: null,
         rootMargin: '0px',
-        threshold: 0.1 // Trigger when 10% of the section is visible
+        threshold: 0.1
     };
 
     const sectionObserver = new IntersectionObserver((entries, observer) => {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
                 entry.target.classList.add('is-visible');
-                observer.unobserve(entry.target); // Stop observing once animated
+                observer.unobserve(entry.target);
             }
         });
     }, observerOptions);
@@ -75,27 +121,10 @@ document.addEventListener('DOMContentLoaded', () => {
     // --- Header H1 Text Reveal Animation ---
     const headerH1 = document.querySelector('header h1');
     if (headerH1) {
-        // Add a class that triggers the CSS typing animation
         headerH1.classList.add('reveal-text');
     }
 
-    // --- Audio Handling (Important Note) ---
-    // Modern browsers heavily restrict autoplay of audio/video without user interaction.
-    // The 'autoplay' attribute is included, but it's likely to be blocked.
-    // Providing 'controls' allows the user to play the music themselves.
-    // If you want a truly seamless experience, you might need a simple
-    // "click anywhere to start" overlay that plays the main intro music.
-    // For now, we'll ensure controls are visible.
-
-    // You could try to play all audio elements on a single, first user interaction
-    // For example, if you had a "Start Journey" button.
-    // const startButton = document.getElementById('start-journey-button'); // hypothetical button
-    // if (startButton) {
-    //     startButton.addEventListener('click', () => {
-    //         document.querySelectorAll('audio').forEach(audio => {
-    //             audio.play().catch(e => console.log("Audio autoplay failed:", e.message));
-    //         });
-    //         // Hide start button/overlay
-    //     });
-    // }
+    // --- Audio Handling Note ---
+    // Browsers heavily restrict autoplay. Users may need to click play.
+    // The 'autoplay' attribute is still on the audio tags.
 });
