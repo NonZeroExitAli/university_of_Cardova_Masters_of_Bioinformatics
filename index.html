@@ -10,14 +10,15 @@
 </head>
 <body>
     <!-- GLOBAL BACKGROUND MUSIC -->
-    <audio id="global-bg-music" loop muted>
+    <!-- Attempting autoplay, NOT MUTED, which will likely be blocked by browsers until first user interaction -->
+    <audio id="global-bg-music" autoplay loop>
         <source src="audio/global_background_music.mp3" type="audio/mpeg">
         Your browser does not support the audio element.
     </audio>
 
-    <!-- MUSIC TOGGLE BUTTON -->
+    <!-- MUSIC TOGGLE BUTTON - Starts as "Music On" -->
     <button id="music-toggle" title="Toggle Background Music">
-        <span class="icon">🔇</span> Music Off
+        <span class="icon">🎶</span> Music On
     </button>
 
     <!-- CELEBRATION OVERLAY - Appears when website opens -->
@@ -44,14 +45,6 @@
                     <h3>Ali</h3>
                 </div>
             </div>
-            <!-- REMOVED: 
-            <p class="music-note">Enjoy our special song for this moment:</p>
-            <audio controls loop>
-                <source src="audio/intro_music.mp3" type="audio/mpeg">
-                Your browser does not support the audio element.
-            </audio>
-            <p class="small-text">(Please press play to listen!)</p>
-            -->
         </section>
 
         <!-- Video Section (Single Video) -->
