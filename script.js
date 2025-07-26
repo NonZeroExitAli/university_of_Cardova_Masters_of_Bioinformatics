@@ -30,24 +30,35 @@ document.addEventListener('DOMContentLoaded', () => {
             }, (delay + duration) * 1000 + 500);
         }
 
-        const numberOfBalloons = 20;
+        const numberOfBalloons = 20; // Increased count for better visibility
         for (let i = 0; i < numberOfBalloons; i++) {
             createBalloon();
         }
 
-        // Start fading out the overlay after 4 seconds
+        // Delay before overlay starts fading out (still 4 seconds)
+        const overlayFadeOutStartDelay = 4000; // milliseconds
+        // Duration of overlay CSS fade-out transition (from style.css: 1.5s)
+        const overlayTransitionDuration = 1500; // milliseconds
+
+        // Start fading out the overlay
         setTimeout(() => {
             celebrationOverlay.classList.add('fade-out');
-        }, 4000);
+        }, overlayFadeOutStartDelay);
 
-        // Fully remove the overlay AND THEN START THE H1 ANIMATION
+        // Calculate when the overlay is completely gone + a small buffer
+        const totalOverlayTime = overlayFadeOutStartDelay + overlayTransitionDuration + 500; // 500ms buffer
+
+        // After the overlay is completely gone, introduce a slight pause, then start H1 animation
         setTimeout(() => {
-            celebrationOverlay.remove();
-            // *** THIS IS THE KEY CHANGE ***
-            if (headerH1) {
-                headerH1.classList.add('reveal-text'); // Add the class to start typing animation
-            }
-        }, 6000); // Overlay takes 1.5s to fade out after 4s, so 5.5s total. Add a small buffer.
+            celebrationOverlay.remove(); // Remove overlay from DOM
+            // *** NEW: Add a short, explicit delay before the H1 animation ***
+            setTimeout(() => {
+                if (headerH1) {
+                    headerH1.classList.add('reveal-text'); // Start typing animation
+                }
+            }, 500); // Wait 0.5 seconds after overlay removal before H1 animation
+        }, totalOverlayTime);
+
     } else {
         // Fallback: If for some reason overlay isn't there, just show the H1 anyway
         if (headerH1) {
@@ -86,7 +97,7 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         }
         if (nextBtn) {
-            currentItemIndex = (currentItemIndex + 1) % items.length; // Fixed typo
+            currentItemIndex = (currentItemIndex + 1) % items.length;
             showItem(currentItemIndex);
         }
 
