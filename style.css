@@ -15,6 +15,36 @@ body {
     overflow-x: hidden;
 }
 
+/* GLOBAL MUSIC TOGGLE BUTTON */
+#music-toggle {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background-color: #8a2be2; /* Purple */
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 15px;
+    cursor: pointer;
+    font-size: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    z-index: 10000; /* Above everything else */
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+#music-toggle:hover {
+    background-color: #6a0dad; /* Darker purple on hover */
+    transform: translateY(-2px);
+}
+
+#music-toggle .icon {
+    font-size: 1.2rem;
+}
+
+
 /* CELEBRATION OVERLAY STYLES */
 #celebration-overlay {
     position: fixed;
@@ -32,6 +62,7 @@ body {
     z-index: 9999; /* Ensure it's on top */
     opacity: 1;
     transition: opacity 1.5s ease-out; /* For fading out */
+    overflow: hidden; /* Crucial to contain balloons */
 }
 
 #celebration-overlay.fade-out {
@@ -57,13 +88,11 @@ body {
     position: absolute;
     width: 60px;
     height: 80px;
-    background-color: #ffccff; /* Light pink-purple */
     border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
     transform: rotate(-10deg);
     box-shadow: inset -5px -5px 10px rgba(0,0,0,0.1);
-    opacity: 0.8;
-    animation: balloon-float 10s ease-in-out infinite alternate,
-               balloon-rise 15s linear forwards; /* Rise up and out */
+    opacity: 1; /* Make sure it starts fully opaque */
+    /* animation properties are now applied via JS for better control */
 }
 
 .balloon::before { /* Top knot */
@@ -105,7 +134,7 @@ body {
 .balloon:nth-child(3) { background-color: #e0bbe4; } /* Muted Purple */
 .balloon:nth-child(4) { background-color: #957dad; } /* Deeper Dusty Purple */
 .balloon:nth-child(5) { background-color: #ffccff; } /* Light Pink-Purple */
-/* Add more :nth-child rules for more specific colors */
+/* Add more :nth-child rules for more specific colors if you have more than 5 balloons */
 
 
 @keyframes balloon-float {
@@ -114,8 +143,8 @@ body {
 }
 
 @keyframes balloon-rise {
-    from { bottom: -100px; opacity: 0.5; }
-    to { bottom: 120%; opacity: 0; } /* Moves off screen */
+    from { bottom: -10%; opacity: 1; }
+    to { bottom: 120%; opacity: 0; }
 }
 
 @keyframes scaleIn {
@@ -301,7 +330,7 @@ h2::after {
     right: 10px;
 }
 
-/* Videos - Adjusted for a single video */
+/* Videos - Adjusted for a single video. Reused for recorded message. */
 .video-container {
     max-width: 800px;
     margin: 2rem auto;
@@ -319,20 +348,20 @@ h2::after {
 /* Wishes Section (Single Image with Quote) */
 .single-wish {
     position: relative;
-    max-width: 700px; /* Adjust as needed */
+    max-width: 700px;
     margin: 2rem auto;
     border-radius: 10px;
-    overflow: hidden; /* Ensures image and overlay stay within bounds */
+    overflow: hidden;
     box-shadow: 0 5px 20px rgba(0,0,0,0.2);
-    height: 400px; /* Fixed height for the image container */
+    height: 400px;
 }
 
 .single-wish img {
     width: 100%;
     height: 100%;
-    object-fit: cover; /* Crops image to fit, maintaining aspect ratio */
+    object-fit: cover;
     display: block;
-    opacity: 0.8; /* Slightly dimmed for quote readability */
+    opacity: 0.8;
 }
 
 .single-wish .quote-overlay {
@@ -365,7 +394,7 @@ h2::after {
     font-family: 'Dancing Script', cursive;
 }
 
-/* Audio */
+/* Audio (General style for individual audio players) */
 audio {
     width: 80%;
     max-width: 600px;
@@ -385,7 +414,7 @@ footer {
     font-size: 0.9rem;
 }
 
-/* Animations (existing) */
+/* Animations */
 @keyframes fadeInDown {
     from { opacity: 0; transform: translateY(-50px); }
     to { opacity: 1; transform: translateY(0); }
@@ -429,11 +458,21 @@ body::before {
     50% { border-color: #9932cc; }
 }
 
-/* Responsive Design (Media Queries) - Existing and already quite robust! */
+/* Responsive Design (Media Queries) */
 @media (max-width: 768px) {
+    #music-toggle {
+        font-size: 0.9rem;
+        padding: 8px 12px;
+        bottom: 15px;
+        right: 15px;
+    }
+    #music-toggle .icon {
+        font-size: 1rem;
+    }
+
     #celebration-overlay .celebration-text { font-size: 2.5rem; }
     #celebration-overlay .celebration-subtext { font-size: 1.5rem; }
-    .balloon { width: 40px; height: 50px; } /* Smaller balloons */
+    .balloon { width: 40px; height: 50px; }
     .balloon-string { height: 40px; bottom: -40px;}
 
     header h1 { font-size: 2.5rem; }
@@ -444,7 +483,7 @@ body::before {
     .photo-carousel { height: 350px; }
     .photo-carousel .prev-btn, .photo-carousel .next-btn { padding: 8px 12px; font-size: 1.5rem; }
     .video-container { padding: 0 0.5rem; }
-    .single-wish { height: 300px; } /* Adjust height for mobile */
+    .single-wish { height: 300px; }
     .single-wish .quote-overlay blockquote { font-size: 1.4rem; }
     section { padding: 1.5rem; }
 }
