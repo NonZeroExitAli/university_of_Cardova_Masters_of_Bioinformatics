@@ -57,11 +57,10 @@ body {
     position: absolute;
     width: 60px;
     height: 80px;
-    background-color: #ffccff; /* Light pink-purple */
     border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
     transform: rotate(-10deg);
     box-shadow: inset -5px -5px 10px rgba(0,0,0,0.1);
-    opacity: 0.8;
+    opacity: 1; /* Make sure it starts fully opaque */
     animation: balloon-float 10s ease-in-out infinite alternate,
                balloon-rise 15s linear forwards; /* Rise up and out */
 }
@@ -105,7 +104,7 @@ body {
 .balloon:nth-child(3) { background-color: #e0bbe4; } /* Muted Purple */
 .balloon:nth-child(4) { background-color: #957dad; } /* Deeper Dusty Purple */
 .balloon:nth-child(5) { background-color: #ffccff; } /* Light Pink-Purple */
-/* Add more :nth-child rules for more specific colors */
+/* You can add more specific colors for .balloon:nth-child(6), (7), etc. */
 
 
 @keyframes balloon-float {
@@ -114,8 +113,8 @@ body {
 }
 
 @keyframes balloon-rise {
-    from { bottom: -100px; opacity: 0.5; }
-    to { bottom: 120%; opacity: 0; } /* Moves off screen */
+    from { bottom: 0%; opacity: 1; } /* Start at the very bottom of the overlay, fully opaque */
+    to { bottom: 120%; opacity: 0; } /* Rise off screen, fading out */
 }
 
 @keyframes scaleIn {
@@ -319,20 +318,20 @@ h2::after {
 /* Wishes Section (Single Image with Quote) */
 .single-wish {
     position: relative;
-    max-width: 700px; /* Adjust as needed */
+    max-width: 700px;
     margin: 2rem auto;
     border-radius: 10px;
-    overflow: hidden; /* Ensures image and overlay stay within bounds */
+    overflow: hidden;
     box-shadow: 0 5px 20px rgba(0,0,0,0.2);
-    height: 400px; /* Fixed height for the image container */
+    height: 400px;
 }
 
 .single-wish img {
     width: 100%;
     height: 100%;
-    object-fit: cover; /* Crops image to fit, maintaining aspect ratio */
+    object-fit: cover;
     display: block;
-    opacity: 0.8; /* Slightly dimmed for quote readability */
+    opacity: 0.8;
 }
 
 .single-wish .quote-overlay {
@@ -444,7 +443,7 @@ body::before {
     .photo-carousel { height: 350px; }
     .photo-carousel .prev-btn, .photo-carousel .next-btn { padding: 8px 12px; font-size: 1.5rem; }
     .video-container { padding: 0 0.5rem; }
-    .single-wish { height: 300px; } /* Adjust height for mobile */
+    .single-wish { height: 300px; }
     .single-wish .quote-overlay blockquote { font-size: 1.4rem; }
     section { padding: 1.5rem; }
 }
