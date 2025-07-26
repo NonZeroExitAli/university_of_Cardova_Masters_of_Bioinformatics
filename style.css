@@ -15,6 +15,122 @@ body {
     overflow-x: hidden;
 }
 
+/* CELEBRATION OVERLAY STYLES */
+#celebration-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, #a77bff, #d291bc); /* Match header gradient */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    font-family: 'Dancing Script', cursive;
+    z-index: 9999; /* Ensure it's on top */
+    opacity: 1;
+    transition: opacity 1.5s ease-out; /* For fading out */
+}
+
+#celebration-overlay.fade-out {
+    opacity: 0;
+    pointer-events: none; /* Make it unclickable after fading */
+}
+
+.celebration-text {
+    font-size: 4rem;
+    text-shadow: 3px 3px 6px rgba(0,0,0,0.3);
+    margin-bottom: 15px;
+    animation: scaleIn 1s ease-out forwards;
+}
+
+.celebration-subtext {
+    font-size: 2rem;
+    opacity: 0; /* Hidden initially */
+    animation: fadeIn 1s ease-out 0.8s forwards; /* Delayed fade in */
+}
+
+/* Balloon Styles */
+.balloon {
+    position: absolute;
+    width: 60px;
+    height: 80px;
+    background-color: #ffccff; /* Light pink-purple */
+    border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+    transform: rotate(-10deg);
+    box-shadow: inset -5px -5px 10px rgba(0,0,0,0.1);
+    opacity: 0.8;
+    animation: balloon-float 10s ease-in-out infinite alternate,
+               balloon-rise 15s linear forwards; /* Rise up and out */
+}
+
+.balloon::before { /* Top knot */
+    content: '';
+    position: absolute;
+    width: 70%;
+    height: 10px;
+    background-color: rgba(0,0,0,0.1);
+    border-radius: 50%;
+    top: -5px;
+    left: 15%;
+}
+
+.balloon::after { /* Bottom knot/string attachment */
+    content: '';
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    background-color: rgba(0,0,0,0.2);
+    border-radius: 50%;
+    bottom: -5px;
+    left: calc(50% - 5px);
+}
+
+.balloon-string {
+    position: absolute;
+    width: 2px;
+    height: 60px;
+    background-color: rgba(0,0,0,0.3);
+    bottom: -60px;
+    left: calc(50% - 1px);
+    transform-origin: top;
+    animation: string-sway 3s ease-in-out infinite alternate;
+}
+
+/* Balloon colors - add more as needed */
+.balloon:nth-child(1) { background-color: #a77bff; } /* Lavender */
+.balloon:nth-child(2) { background-color: #d291bc; } /* Dusty Rose */
+.balloon:nth-child(3) { background-color: #e0bbe4; } /* Muted Purple */
+.balloon:nth-child(4) { background-color: #957dad; } /* Deeper Dusty Purple */
+.balloon:nth-child(5) { background-color: #ffccff; } /* Light Pink-Purple */
+/* Add more :nth-child rules for more specific colors */
+
+
+@keyframes balloon-float {
+    0%, 100% { transform: translateY(0) rotate(-10deg); }
+    50% { transform: translateY(-20px) rotate(10deg); }
+}
+
+@keyframes balloon-rise {
+    from { bottom: -100px; opacity: 0.5; }
+    to { bottom: 120%; opacity: 0; } /* Moves off screen */
+}
+
+@keyframes scaleIn {
+    from { transform: scale(0.5); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+/* END CELEBRATION OVERLAY STYLES */
+
+
 /* Header */
 header {
     background: linear-gradient(135deg, #a77bff 0%, #d291bc 99%, #d291bc 100%);
@@ -127,7 +243,7 @@ h2::after {
     margin-top: 0.5rem;
 }
 
-/* Photo Carousel (General Styling for both carousels) */
+/* Photo Carousel (General Styling for memories carousel) */
 .photo-carousel {
     position: relative;
     max-width: 900px;
@@ -154,57 +270,6 @@ h2::after {
     display: block;
     opacity: 1;
 }
-
-/* For Wishes carousel items with overlays */
-.photo-carousel .carousel-item {
-    width: 100%;
-    height: 100%;
-    position: relative;
-    display: none;
-    background-color: black;
-}
-
-.photo-carousel .carousel-item.active {
-    display: block;
-}
-
-.photo-carousel .carousel-item img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    opacity: 0.8;
-}
-
-.quote-overlay {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.4);
-    color: white;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 20px;
-    text-align: center;
-    box-sizing: border-box;
-}
-
-.quote-overlay blockquote {
-    background: none;
-    border: none;
-    margin: 0;
-    padding: 0;
-    color: white;
-    font-size: 1.8rem;
-    font-style: italic;
-    max-width: 80%;
-    text-shadow: 1px 1px 3px rgba(0,0,0,0.5);
-    line-height: 1.4;
-    font-family: 'Dancing Script', cursive;
-}
-
 
 .photo-carousel .prev-btn,
 .photo-carousel .next-btn {
@@ -237,18 +302,67 @@ h2::after {
 }
 
 /* Videos - Adjusted for a single video */
-.video-container { /* New container for single video */
-    max-width: 800px; /* Limit max width for large screens */
-    margin: 2rem auto; /* Center the container */
-    padding: 0 1rem; /* Add some padding on smaller screens */
+.video-container {
+    max-width: 800px;
+    margin: 2rem auto;
+    padding: 0 1rem;
 }
 
-.video-container video { /* Styles for the single video */
-    width: 100%; /* Makes video fill its container */
-    height: auto; /* Maintains aspect ratio */
-    max-height: 500px; /* Prevent it from getting too tall */
+.video-container video {
+    width: 100%;
+    height: auto;
+    max-height: 500px;
     border-radius: 10px;
     box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+/* Wishes Section (Single Image with Quote) */
+.single-wish {
+    position: relative;
+    max-width: 700px; /* Adjust as needed */
+    margin: 2rem auto;
+    border-radius: 10px;
+    overflow: hidden; /* Ensures image and overlay stay within bounds */
+    box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+    height: 400px; /* Fixed height for the image container */
+}
+
+.single-wish img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Crops image to fit, maintaining aspect ratio */
+    display: block;
+    opacity: 0.8; /* Slightly dimmed for quote readability */
+}
+
+.single-wish .quote-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.4);
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    text-align: center;
+    box-sizing: border-box;
+}
+
+.single-wish .quote-overlay blockquote {
+    background: none;
+    border: none;
+    margin: 0;
+    padding: 0;
+    color: white;
+    font-size: 1.8rem;
+    font-style: italic;
+    max-width: 90%;
+    text-shadow: 1px 1px 3px rgba(0,0,0,0.5);
+    line-height: 1.4;
+    font-family: 'Dancing Script', cursive;
 }
 
 /* Audio */
@@ -271,16 +385,10 @@ footer {
     font-size: 0.9rem;
 }
 
-/* Animations */
+/* Animations (existing) */
 @keyframes fadeInDown {
-    from {
-        opacity: 0;
-        transform: translateY(-50px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
+    from { opacity: 0; transform: translateY(-50px); }
+    to { opacity: 1; transform: translateY(0); }
 }
 
 body::before {
@@ -298,12 +406,8 @@ body::before {
 }
 
 @keyframes backgroundMove {
-    0% {
-        background-position: 0% 0%, 100% 100%;
-    }
-    100% {
-        background-position: 100% 100%, 0% 0%;
-    }
+    0% { background-position: 0% 0%, 100% 100%; }
+    100% { background-position: 100% 100%, 0% 0%; }
 }
 
 .reveal-text {
@@ -327,68 +431,32 @@ body::before {
 
 /* Responsive Design (Media Queries) - Existing and already quite robust! */
 @media (max-width: 768px) {
-    header h1 {
-        font-size: 2.5rem;
-    }
+    #celebration-overlay .celebration-text { font-size: 2.5rem; }
+    #celebration-overlay .celebration-subtext { font-size: 1.5rem; }
+    .balloon { width: 40px; height: 50px; } /* Smaller balloons */
+    .balloon-string { height: 40px; bottom: -40px;}
 
-    header p {
-        font-size: 1.2rem;
-    }
-
-    h2 {
-        font-size: 1.8rem;
-    }
-
-    #intro .intro-content {
-        flex-direction: column;
-    }
-
-    #intro .intro-image {
-        max-width: 80%;
-    }
-
-    .photo-carousel {
-        height: 350px;
-    }
-
-    .photo-carousel .prev-btn,
-    .photo-carousel .next-btn {
-        padding: 8px 12px;
-        font-size: 1.5rem;
-    }
-
-    /* No need for video-gallery specific media query as it's now a single video-container */
-    .video-container {
-        padding: 0 0.5rem; /* Slightly less padding on very small screens */
-    }
-
-    section {
-        padding: 1.5rem;
-    }
-
-    .quote-overlay blockquote {
-        font-size: 1.4rem;
-    }
+    header h1 { font-size: 2.5rem; }
+    header p { font-size: 1.2rem; }
+    h2 { font-size: 1.8rem; }
+    #intro .intro-content { flex-direction: column; }
+    #intro .intro-image { max-width: 80%; }
+    .photo-carousel { height: 350px; }
+    .photo-carousel .prev-btn, .photo-carousel .next-btn { padding: 8px 12px; font-size: 1.5rem; }
+    .video-container { padding: 0 0.5rem; }
+    .single-wish { height: 300px; } /* Adjust height for mobile */
+    .single-wish .quote-overlay blockquote { font-size: 1.4rem; }
+    section { padding: 1.5rem; }
 }
 
 @media (max-width: 480px) {
-    header h1 {
-        font-size: 2rem;
-    }
+    #celebration-overlay .celebration-text { font-size: 2rem; }
+    #celebration-overlay .celebration-subtext { font-size: 1.2rem; }
 
-    header p {
-        font-size: 1rem;
-    }
-
-    h2 {
-        font-size: 1.5rem;
-    }
-
-    .photo-carousel {
-        height: 250px;
-    }
-
-    .quote-overlay blockquote {
-        font-size: 1.2rem;
-    }
+    header h1 { font-size: 2rem; }
+    header p { font-size: 1rem; }
+    h2 { font-size: 1.5rem; }
+    .photo-carousel { height: 250px; }
+    .single-wish { height: 250px; }
+    .single-wish .quote-overlay blockquote { font-size: 1.2rem; }
 }
