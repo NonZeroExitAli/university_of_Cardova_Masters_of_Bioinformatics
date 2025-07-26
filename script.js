@@ -1,8 +1,46 @@
 document.addEventListener('DOMContentLoaded', () => {
 
+    // --- Global Background Music Logic ---
+    const globalBgMusic = document.getElementById('global-bg-music');
+    const musicToggleButton = document.getElementById('music-toggle');
+    const musicToggleIcon = musicToggleButton.querySelector('.icon');
+
+    let isMusicMuted = true; // Start muted, matching HTML
+
+    // Function to update the button text/icon
+    function updateMusicToggleButton() {
+        if (globalBgMusic.muted || globalBgMusic.paused) {
+            musicToggleIcon.textContent = '🔇';
+            musicToggleButton.innerHTML = `<span class="icon">🔇</span> Music Off`;
+        } else {
+            musicToggleIcon.textContent = '🎶';
+            musicToggleButton.innerHTML = `<span class="icon">🎶</span> Music On`;
+        }
+    }
+
+    // Try to play muted music on user interaction (after celebration overlay removal)
+    // Most browsers only allow autoplay if muted or after a direct user gesture.
+    // We'll tie the initial play attempt to the overlay removal as a user-like interaction.
+
+    // Click handler for the toggle button
+    musicToggleButton.addEventListener('click', () => {
+        if (globalBgMusic.paused || globalBgMusic.muted) {
+            globalBgMusic.muted = false; // Unmute
+            globalBgMusic.play().catch(e => console.log("Music play prevented (user gesture needed):", e));
+        } else {
+            globalBgMusic.muted = true; // Mute
+            globalBgMusic.pause(); // Or just mute, user preference
+        }
+        updateMusicToggleButton();
+    });
+
+    // Initial button state
+    updateMusicToggleButton();
+
+
     // --- Celebration Overlay & Balloons Logic ---
     const celebrationOverlay = document.getElementById('celebration-overlay');
-    const headerH1 = document.querySelector('header h1'); // Get the H1 element
+    const headerH1 = document.querySelector('header h1');
 
     if (celebrationOverlay) {
         function createBalloon() {
@@ -30,44 +68,41 @@ document.addEventListener('DOMContentLoaded', () => {
             }, (delay + duration) * 1000 + 500);
         }
 
-        const numberOfBalloons = 20; // Increased count for better visibility
+        const numberOfBalloons = 20;
         for (let i = 0; i < numberOfBalloons; i++) {
             createBalloon();
         }
 
-        // Delay before overlay starts fading out (still 4 seconds)
-        const overlayFadeOutStartDelay = 4000; // milliseconds
-        // Duration of overlay CSS fade-out transition (from style.css: 1.5s)
-        const overlayTransitionDuration = 1500; // milliseconds
+        const overlayFadeOutStartDelay = 4000;
+        const overlayTransitionDuration = 1500;
 
-        // Start fading out the overlay
         setTimeout(() => {
             celebrationOverlay.classList.add('fade-out');
+            // Attempt to play global background music muted as overlay fades
+            globalBgMusic.play().catch(e => console.log("Muted autoplay prevented:", e));
         }, overlayFadeOutStartDelay);
 
-        // Calculate when the overlay is completely gone + a small buffer
-        const totalOverlayTime = overlayFadeOutStartDelay + overlayTransitionDuration + 500; // 500ms buffer
+        const totalOverlayTime = overlayFadeOutStartDelay + overlayTransitionDuration + 500;
 
-        // After the overlay is completely gone, introduce a slight pause, then start H1 animation
         setTimeout(() => {
-            celebrationOverlay.remove(); // Remove overlay from DOM
-            // *** NEW: Add a short, explicit delay before the H1 animation ***
+            celebrationOverlay.remove();
             setTimeout(() => {
                 if (headerH1) {
-                    headerH1.classList.add('reveal-text'); // Start typing animation
+                    headerH1.classList.add('reveal-text');
                 }
-            }, 500); // Wait 0.5 seconds after overlay removal before H1 animation
+            }, 500);
         }, totalOverlayTime);
 
     } else {
-        // Fallback: If for some reason overlay isn't there, just show the H1 anyway
+        // Fallback: If no overlay, just play H1 and global music immediately
         if (headerH1) {
             headerH1.classList.add('reveal-text');
         }
+        globalBgMusic.play().catch(e => console.log("Muted autoplay prevented on fallback:", e));
     }
 
 
-    // --- Reusable Carousel Function (only for Memories) ---
+    // --- Reusable Carousel Function (for Memories) ---
     function setupCarousel(carouselSelector) {
         const carousel = document.querySelector(carouselSelector);
         if (!carousel) return;
@@ -110,7 +145,7 @@ document.addEventListener('DOMContentLoaded', () => {
     setupCarousel('.memories-carousel');
 
     // --- Scroll Reveal Animation for Sections ---
-    const scrollRevealSections = document.querySelectorAll('.scroll-reveal');
+    const scrollRevealSections = document.querySelectorAll('.scroll-reveal'); // This now includes #recorded-message
 
     const observerOptions = {
         root: null,
@@ -131,7 +166,9 @@ document.addEventListener('DOMContentLoaded', () => {
         sectionObserver.observe(section);
     });
 
-    // --- Audio Handling Note ---
-    // Browsers heavily restrict autoplay. Users may need to click play.
-    // The 'autoplay' attribute is still on the audio tags.
+    // --- Audio Handling Notes ---
+    // Individual audio players (#intro, #memories) are now manual play (no autoplay).
+    // The global background music will handle persistent audio.
+    // Users might still need to interact with the page (e.g., click the music button)
+    // for the global background music to start playing, especially if they haven't interacted before.
 });
