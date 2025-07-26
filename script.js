@@ -5,37 +5,52 @@ document.addEventListener('DOMContentLoaded', () => {
     const musicToggleButton = document.getElementById('music-toggle');
     const musicToggleIcon = musicToggleButton.querySelector('.icon');
 
-    let isMusicMuted = true; // Start muted, matching HTML
+    // Music is set to autoplay in HTML (unmuted), so initially assume it's playing
+    // However, browsers will likely block unmuted autoplay, so we need to prepare for that.
+    let isMusicPlaying = true; // Assume it's trying to play
 
     // Function to update the button text/icon
     function updateMusicToggleButton() {
-        if (globalBgMusic.muted || globalBgMusic.paused) {
+        if (globalBgMusic.paused) { // If it's paused, it's off
+            musicToggleIcon.textContent = '🔇';
+            musicToggleButton.innerHTML = `<span class="icon">🔇</span> Music Off`;
+            isMusicPlaying = false;
+        } else { // If it's not paused, it's on (or trying to play)
+            musicToggleIcon.textContent = '🎶';
+            musicToggleButton.innerHTML = `<span class="icon">🎶</span> Music On`;
+            isMusicPlaying = true;
+        }
+    }
+
+    // Click handler for the toggle button
+    musicToggleButton.addEventListener('click', () => {
+        if (isMusicPlaying) { // If it's currently on, turn it off
+            globalBgMusic.pause();
+            isMusicPlaying = false;
+        } else { // If it's currently off, turn it on
+            globalBgMusic.play().catch(e => console.log("Music play prevented on click (likely first interaction needed):", e));
+            isMusicPlaying = true;
+        }
+        updateMusicToggleButton(); // Update button state
+    });
+
+    // Initial button state (will show Music On)
+    updateMusicToggleButton();
+
+    // Add an event listener to the audio itself to ensure the button state is always correct
+    // if the browser decides to pause it for any reason (e.g., policy, tab switch)
+    globalBgMusic.addEventListener('play', updateMusicToggleButton);
+    globalBgMusic.addEventListener('pause', updateMusicToggleButton);
+    globalBgMusic.addEventListener('volumechange', () => {
+        // If the volume is set to 0 by the user/browser, consider it "off" visually
+        if (globalBgMusic.volume === 0 || globalBgMusic.muted) {
             musicToggleIcon.textContent = '🔇';
             musicToggleButton.innerHTML = `<span class="icon">🔇</span> Music Off`;
         } else {
             musicToggleIcon.textContent = '🎶';
             musicToggleButton.innerHTML = `<span class="icon">🎶</span> Music On`;
         }
-    }
-
-    // Try to play muted music on user interaction (after celebration overlay removal)
-    // Most browsers only allow autoplay if muted or after a direct user gesture.
-    // We'll tie the initial play attempt to the overlay removal as a user-like interaction.
-
-    // Click handler for the toggle button
-    musicToggleButton.addEventListener('click', () => {
-        if (globalBgMusic.paused || globalBgMusic.muted) {
-            globalBgMusic.muted = false; // Unmute
-            globalBgMusic.play().catch(e => console.log("Music play prevented (user gesture needed):", e));
-        } else {
-            globalBgMusic.muted = true; // Mute
-            globalBgMusic.pause(); // Or just mute, user preference
-        }
-        updateMusicToggleButton();
     });
-
-    // Initial button state
-    updateMusicToggleButton();
 
 
     // --- Celebration Overlay & Balloons Logic ---
@@ -78,8 +93,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
         setTimeout(() => {
             celebrationOverlay.classList.add('fade-out');
-            // Attempt to play global background music muted as overlay fades
-            globalBgMusic.play().catch(e => console.log("Muted autoplay prevented:", e));
+            // Attempt to play global background music unmuted here.
+            // This is the point where it might be blocked.
+            globalBgMusic.play().catch(e => console.log("Unmuted autoplay prevented (likely needs user interaction):", e));
+            // Update button state immediately after trying to play
+            updateMusicToggleButton();
         }, overlayFadeOutStartDelay);
 
         const totalOverlayTime = overlayFadeOutStartDelay + overlayTransitionDuration + 500;
@@ -98,7 +116,8 @@ document.addEventListener('DOMContentLoaded', () => {
         if (headerH1) {
             headerH1.classList.add('reveal-text');
         }
-        globalBgMusic.play().catch(e => console.log("Muted autoplay prevented on fallback:", e));
+        globalBgMusic.play().catch(e => console.log("Unmuted autoplay prevented on fallback (likely needs user interaction):", e));
+        updateMusicToggleButton(); // Update button state
     }
 
 
@@ -145,7 +164,7 @@ document.addEventListener('DOMContentLoaded', () => {
     setupCarousel('.memories-carousel');
 
     // --- Scroll Reveal Animation for Sections ---
-    const scrollRevealSections = document.querySelectorAll('.scroll-reveal'); // This now includes #recorded-message
+    const scrollRevealSections = document.querySelectorAll('.scroll-reveal');
 
     const observerOptions = {
         root: null,
@@ -165,10 +184,4 @@ document.addEventListener('DOMContentLoaded', () => {
     scrollRevealSections.forEach(section => {
         sectionObserver.observe(section);
     });
-
-    // --- Audio Handling Notes ---
-    // Individual audio players (#intro, #memories) are now manual play (no autoplay).
-    // The global background music will handle persistent audio.
-    // Users might still need to interact with the page (e.g., click the music button)
-    // for the global background music to start playing, especially if they haven't interacted before.
 });
