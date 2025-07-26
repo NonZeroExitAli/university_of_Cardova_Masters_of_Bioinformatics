@@ -9,8 +9,14 @@
     <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;700&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
 </head>
 <body>
+    <!-- CELEBRATION OVERLAY - Appears when website opens -->
+    <div id="celebration-overlay">
+        <h1 class="celebration-text">Happy Birthday, Toty!</h1>
+        <p class="celebration-subtext">With all my love, Ali</p>
+    </div>
+
     <header>
-        <h1 class="reveal-text">Happy Birthday, My Toty!</h1>
+        <h1 class="reveal-text">Happy Birthday, My Dearest Taqtoqa!</h1>
         <p>A special website just for you!</p>
     </header>
 
@@ -35,11 +41,11 @@
             <p class="small-text">(Autoplay might be blocked by browsers, please press play!)</p>
         </section>
 
-        <!-- Video Section -->
+        <!-- Video Section (Single Video) -->
         <section id="videos" class="scroll-reveal">
             <h2>Our Special Moment in Motion</h2>
             <p>Relive a cherished memory:</p>
-            <div class="video-container"> <!-- Changed from video-gallery for single video -->
+            <div class="video-container">
                 <video controls loop muted>
                     <source src="videos/video1.mp4" type="video/mp4">
                     Your browser does not support the video tag.
@@ -47,7 +53,7 @@
             </div>
         </section>
 
-        <!-- Memories Section: 10 pics with background music -->
+        <!-- Memories Section: 10 pics with background music (Carousel) -->
         <section id="memories" class="scroll-reveal">
             <h2>Our Cherished Memories</h2>
             <p>A collection of moments that light up my heart:</p>
@@ -73,50 +79,16 @@
             <p class="small-text">(Autoplay might be blocked by browsers, please press play!)</p>
         </section>
 
-        <!-- Wishes Section: 5 pics with quotes (and another music) -->
+        <!-- Wishes Section: Single Pic with Quote -->
         <section id="wishes" class="scroll-reveal">
             <h2>My Hopes and Wishes for You</h2>
-            <p>Little thoughts and wishes inspired by our journey:</p>
-            <div class="photo-carousel wishes-carousel">
-                <div class="carousel-item">
-                    <img src="images/wish_pic1.jpg" alt="Wish 1">
-                    <div class="quote-overlay">
-                        <blockquote>"May our adventures continue to grow more beautiful with each passing year."</blockquote>
-                    </div>
+            <p>A special wish from my heart:</p>
+            <div class="single-wish">
+                <img src="images/wish_pic1.jpg" alt="A special wish for you">
+                <div class="quote-overlay">
+                    <blockquote>"Happy Birthday, my love! May all your dreams come true and our journey together be filled with endless happiness."</blockquote>
                 </div>
-                <div class="carousel-item">
-                    <img src="images/wish_pic2.jpg" alt="Wish 2">
-                    <div class="quote-overlay">
-                        <blockquote>"Wishing you endless joy, laughter, and all the happiness you deserve."</blockquote>
-                    </div>
-                </div>
-                <div class="carousel-item">
-                    <img src="images/wish_pic3.jpg" alt="Wish 3">
-                    <div class="quote-overlay">
-                        <blockquote>"Your smile is my favorite, may it always shine brightly."</blockquote>
-                    </div>
-                </div>
-                <div class="carousel-item">
-                    <img src="images/wish_pic4.jpg" alt="Wish 4">
-                    <div class="quote-overlay">
-                        <blockquote>"Here's to many more unforgettable moments together."</blockquote>
-                    </div>
-                </div>
-                <div class="carousel-item">
-                    <img src="images/wish_pic5.jpg" alt="Wish 5">
-                    <div class="quote-overlay">
-                        <blockquote>"Happy Birthday, my love! May all your dreams come true."</blockquote>
-                    </div>
-                </div>
-                <button class="prev-btn">‹</button>
-                <button class="next-btn">›</button>
             </div>
-            <p class="music-note">A song to accompany these wishes:</p>
-            <audio controls loop autoplay>
-                <source src="audio/wishes_music.mp3" type="audio/mpeg">
-                Your browser does not support the audio element.
-            </audio>
-            <p class="small-text">(Autoplay might be blocked by browsers, please press play!)</p>
         </section>
     </main>
 
